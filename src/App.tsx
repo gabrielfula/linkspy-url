@@ -12,6 +12,7 @@ export default function App() {
                          method: "POST",
                          headers: {
                               "Content-Type": "application/json",
+                              "api-key": import.meta.env.VITE_API_KEY
                          },
                          body: JSON.stringify({ latitude, longitude, track }),
                     });
