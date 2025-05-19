@@ -7,12 +7,15 @@ export default function TrackingPage() {
                const track = query.get("track");
                const API_URL = import.meta.env.VITE_API_URL;
 
-               const sendLocationAndRedirect = async (latitude: number, longitude: number) => {
+               const sendLocationAndRedirect = async (
+                    latitude: number | null,
+                    longitude: number | null
+               ) => {
                     const response = await fetch(`${API_URL}/admin/url/track/`, {
                          method: "POST",
                          headers: {
-                              "Content-Type": "application/json",
-                              "api-key": import.meta.env.VITE_API_KEY
+                         "Content-Type": "application/json",
+                              "api-key": import.meta.env.VITE_API_KEY,
                          },
                          body: JSON.stringify({ latitude, longitude, track }),
                     });
@@ -25,9 +28,13 @@ export default function TrackingPage() {
                };
 
                navigator.geolocation.getCurrentPosition(
-                    (pos) => sendLocationAndRedirect(pos.coords.latitude, pos.coords.longitude),
-                    () => {},
-                    { enableHighAccuracy: true, timeout: 5000 }
+               (pos) => {
+                    sendLocationAndRedirect(pos.coords.latitude, pos.coords.longitude);
+               },
+               (error: any) => {
+                    sendLocationAndRedirect(null, null);
+               },
+               { enableHighAccuracy: true, timeout: 5000 }
                );
           };
 
