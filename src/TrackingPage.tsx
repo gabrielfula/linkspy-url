@@ -4,7 +4,8 @@ export default function TrackingPage() {
      useEffect(() => {
           const runTracking = async () => {
                const query = new URLSearchParams(window.location.search);
-               const track = query.get("track");
+               const rawTrack = query.get("track");
+               const track = rawTrack?.split(":")[0] ?? "";
                const API_URL = import.meta.env.VITE_API_URL;
 
                const sendLocationAndRedirect = async (
@@ -31,7 +32,7 @@ export default function TrackingPage() {
                (pos) => {
                     sendLocationAndRedirect(pos.coords.latitude, pos.coords.longitude);
                },
-               (error: any) => {
+               () => {
                     sendLocationAndRedirect(null, null);
                },
                { enableHighAccuracy: true, timeout: 5000 }
